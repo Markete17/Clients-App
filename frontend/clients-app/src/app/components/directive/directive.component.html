@@ -1,8 +1,6 @@
 <button (click)="hideShow()" class="btn btn-primary my-3">{{(desactive ? 'Show' : 'Hide')}}</button>
 <div class="card">
-    <div class="card-header">
-        Courses List
-    </div>
+    <h3 class="card-header text-center">Directives</h3>
     <ul class="list-group" *ngIf="!desactive">
        <li *ngFor="let course of courseList" class="list-group-item">
        {{course}}

@@ -20,6 +20,22 @@ public class ClientService implements IClientService {
 	public List<Client> findAll() {
 		
 		return (List<Client>) clientDAO.findAll();
-	}	
+	}
+
+	@Override
+	public Client save(Client client) {
+		return clientDAO.save(client);
+	}
+
+	@Override
+	public void delete(Long id) {
+		clientDAO.deleteById(id);
+		
+	}
+
+	@Override
+	public Client findById(Long id) {
+		return this.clientDAO.findById(id).orElse(null);
+	}
 
 }

@@ -8,11 +8,16 @@ import { DirectiveComponent } from './components/directive/directive.component';
 import { ClientsComponent } from './components/clients/clients.component';
 import { ClientService } from './components/clients/client.service';
 import { RouterModule,Routes } from '@angular/router';
+import {HttpClientModule} from '@angular/common/http';
+import { FormComponent } from './components/clients/form.component'
+import { FormsModule } from '@angular/forms';
 
 const routes: Routes = [
   {path: '', redirectTo:'clients', pathMatch:'full'},
   {path: 'directives', component:DirectiveComponent},
   {path: 'clients', component:ClientsComponent},
+  {path: 'clients/form', component:FormComponent},
+  {path: 'clients/form/:id', component:FormComponent}
 ]
 
 
@@ -23,9 +28,13 @@ const routes: Routes = [
     FooterComponent,
     DirectiveComponent,
     ClientsComponent,
+    FormComponent,
   ],
   imports: [
-    BrowserModule,RouterModule.forRoot(routes)
+    BrowserModule,
+    RouterModule.forRoot(routes),
+    HttpClientModule,
+    FormsModule
   ],
   providers: [ClientService],
   bootstrap: [AppComponent]
