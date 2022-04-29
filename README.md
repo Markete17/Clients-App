@@ -13,16 +13,16 @@ Antes de continuar vamos a revisar y modificar el archivo tsconfig.json que se e
 "strictPropertyInitialization": false 
 etc... y cualquier otra configuración que contenga la palabra strict al comienzo lo cambian a false
 
-## Instalar un componente mas rapido
+### Instalar un componente mas rapido
 - Crea la carpeta header, componente ts, html y css asociados
 
 - cd components
 - ng g c clients
 
-## Instalar una clase mas rapido
+### Instalar una clase mas rapido
 - ng generate class client
 
-## Instalar un service mas rapido
+### Instalar un service mas rapido
 - ng g service client
 
 ## Bootstrap Jquery Popper
@@ -31,6 +31,16 @@ etc... y cualquier otra configuración que contenga la palabra strict al comienz
 ## Instalar un form component más rapido
 - ng g c clients/form --flat
 
-## SweetAlert - Mandar alert más bonitos
+### SweetAlert - Mandar alert más bonitos
 - npm install sweetalert2 --save
 
+## Backend
+
+### Validar Form
+Para validar es muy importante agregar la siguiente dependencia en el pom.xml del proyecto Spring Boot
+	<pre><code>
+	<dependency>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-validation</artifactId>
+	</dependency>
+	</code></pre>

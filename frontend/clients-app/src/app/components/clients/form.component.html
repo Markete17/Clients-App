@@ -1,31 +1,73 @@
+<ul class="alert alert-danger" *ngIf="errors?.length > 0">
+    <li class="mx-3" *ngFor="let err of errors">
+        {{err}}
+    </li>
+</ul>
 <div class="card bg-dark text-white">
     <h3 class="card-header text-center">{{title}}</h3>
     <div class="card-body text-white">
-        <form>
+        <form #clientForm="ngForm">
             <div class="form-group row">
                 <label for="firstName" class="col-form-label col-sm-2">First Name</label>
                 <div class="col-sm-6">
-                    <input type="text" class="form-control" [(ngModel)]="client.firstName" name="firstName">
+                    <input type="text" class="form-control" [(ngModel)]="client.firstName" name="firstName" #firstName="ngModel"> <!-- Validaciones con angular se puede poner required minlength="4"  -->
+                    <!--Invalid cuando hay algun error-->
+                    <!--Dirty comprueba el error mientras se escribe en el foco del input-->
+                    <!--Touched cuando se deja el foco del input-->
+                    <!-- VALIDACION CON ANGULAR 
+                    <div class="alert alert-danger" *ngIf="firstName.invalid && (firstName.dirty || firstName.touched)">
+
+                        <div *ngIf="firstName.errors.required">
+                            First Name Required
+                        </div>
+                        <div *ngIf="firstName.errors.minlength">
+                            Name must have at least 4 characters
+                        </div>
+                        
+                    </div>
+                    -->
                 </div>
             </div>
             <div class="form-group row mt-2">
                 <label for="firstName" class="col-form-label col-sm-2">Last Name</label>
                 <div class="col-sm-6">
-                    <input type="text" class="form-control" [(ngModel)]="client.lastName" name="lastName">
+                    <input type="text" class="form-control" [(ngModel)]="client.lastName" name="lastName" #lastName="ngModel"> <!-- required  -->
+                    <!--
+                    <div class="alert alert-danger" *ngIf="lastName.invalid && (lastName.dirty || lastName.touched)">
+                        
+                        <div *ngIf="lastName.errors.required">
+                            Last Name Required
+                        </div>
+                        <div *ngIf="lastName.errors.minlength">
+                            Last Name must have at least 4 characters
+                        </div>
+                    </div>
+                    -->
                 </div>
             </div>
             <div class="form-group row mt-2">
                 <label for="firstName" class="col-form-label col-sm-2">Email</label>
                 <div class="col-sm-6">
-                    <input type="email" class="form-control" [(ngModel)]="client.email" name="email">
+                    <input type="email" class="form-control" [(ngModel)]="client.email" name="email" #email="ngModel"> <!-- required email  -->
+                    <!-- VALIDACION CON ANGULAR
+                    <div class="alert alert-danger" *ngIf="email.invalid && (email.dirty || email.touched)">
+
+                        <div *ngIf="email.errors.required">
+                            Last Name Required
+                        </div>
+                        <div *ngIf="email.errors.email">
+                            Invalid email format
+                        </div>
+                    </div>
+                    -->
                 </div>
             </div>
             <div class="form-group row mt-2 float-none">
                 <div class="col-sm-6">
-                    <button (click)="create()" class="btn btn-primary" role="button" *ngIf="!client.id else elseBlock">Add</button>
+                    <button (click)="create()" class="btn btn-primary" role="button" *ngIf="!client.id else elseBlock" [disabled]="!clientForm.valid">Add</button>
                 </div>
                 <ng-template #elseBlock>
-                    <button (click)="update()" class="btn btn-primary" role="button">Update</button>
+                    <button (click)="update()" class="btn btn-primary" role="button" [disabled]="!clientForm.valid">Update</button>
                 </ng-template>
             </div>
         </form>

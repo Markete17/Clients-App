@@ -23,7 +23,7 @@
             <tbody class="text-center">
                 <tr *ngFor="let client of clients">
                     <td>{{client.id}}</td>
-                    <td>{{client.firstName}}</td>
+                    <td>{{client.firstName }}</td> <!--<td>{{client.firstName || uppercase }}</td> para formatear dentro de la plantilla y no en el component--> 
                     <td>{{client.lastName}}</td>
                     <td>{{client.email}}</td>
                     <td>{{client.createAt}}</td>

@@ -12,7 +12,9 @@ export class FormComponent implements OnInit {
 
   constructor(private clientService: ClientService,private route:Router,private activatedRoute:ActivatedRoute) { }
   title:string = 'Create Client';
-  public client:Client=new Client();
+  client:Client=new Client();
+
+  errors:string[];
 
   ngOnInit(): void {
     this.loadClient()
@@ -31,7 +33,9 @@ export class FormComponent implements OnInit {
 
   create(){
     this.clientService.create(this.client)
-    .subscribe( client => {
+    .subscribe( {
+      next: response => 
+      {
         Swal.fire({
           title: 'Do you want to submit?',
           showDenyButton: true,
@@ -40,7 +44,7 @@ export class FormComponent implements OnInit {
           denyButtonText: `Don't save`,
         }).then((result) => {
           if (result.isConfirmed) {
-            Swal.fire('New Client',`Client ${client.firstName} has created successfully!`,'success').then((result) =>{
+            Swal.fire('New Client',`${response.message} - ${response.client.firstName}`,'success').then((result) =>{
               if (result.isConfirmed) {
                 this.route.navigate(['/clients']);
               }
@@ -50,13 +54,17 @@ export class FormComponent implements OnInit {
             Swal.fire('Changes are not saved!', '', 'info')
           }
         })
-        
-        })
+      },
+      error: (err) => this.errors = err.error.errors as string [],
+      complete: () => console.log(this.errors),
+      }
+        );
   }
 
   update(){
     this.clientService.update(this.client)
-    .subscribe( client => {
+    .subscribe( {
+      next: client => {
       Swal.fire({
         title: 'Do you want to submit?',
         showDenyButton: true,
@@ -65,7 +73,7 @@ export class FormComponent implements OnInit {
         denyButtonText: `Don't update`,
       }).then((result) => {
         if (result.isConfirmed) {
-          Swal.fire('Client updated',`Client ${client.firstName} has updated successfully!`,'success').then((result) =>{
+          Swal.fire('Client updated',`The client: ${client.firstName} has updated successfully`,'success').then((result) =>{
             if (result.isConfirmed) {
               this.route.navigate(['/clients']);
             }
@@ -73,10 +81,12 @@ export class FormComponent implements OnInit {
         } else if (result.isDenied) {
           Swal.fire('Changes are not updated', '', 'info')
         }
-      }).then((result)=>{
-
       })
-    })
+    },
+    error: (err) => this.errors = err.error.errors as string [],
+    complete: () => console.log(this.errors),
+    }
+      );
   }
 
 }
