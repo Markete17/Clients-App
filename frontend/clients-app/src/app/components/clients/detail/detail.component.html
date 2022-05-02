@@ -1,0 +1,51 @@
+
+<div class="open-modal animator fadeIn" *ngIf="modalService.modal">
+<div  class="modal" style="display:block;">
+    
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title">{{title}}</h5>
+          <button (click)="closeModal()" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <div class="container text-center">
+                <div class="row">
+                    <div class="col-sm">
+                        <div class="col-sm">
+                            <ul *ngIf="client" class="list-group text-primary mb-3">
+                                <li class="list-group-item bg-muted"><b>First Name</b><br> {{client.firstName}}</li>
+                                <li class="list-group-item"><b>Last Name</b><br> {{client.lastName}}</li>
+                                <li class="list-group-item"><b>Emai:</b><br> {{client.email}}</li>
+                                <li class="list-group-item"><b>Create At</b><br> {{client.createAt | date:"fullDate"}}</li>
+                            </ul>
+                        </div>
+                        <div class="input-group mx-auto" style="width: 200px;">
+                            <input (change)="selectPhoto($event)" type="file" class="file-select" id="uploadImage" aria-describedby="inputGroupFileAddon04" aria-label="Upload">
+                            <button [disabled]="!selectedPhoto"(click)="upload()" class="btn btn-outline-primary" type="button" id="inputGroupFileAddon04">Upload</button>
+                        </div>
+        
+                        <div *ngIf="progressBar>0"class="progress mt-2">
+                            <div class="progress-bar progress-bar-striped" role="progressbar" [ngStyle]="{'width':progressBar+'%'}" attr.aria-valuenow="{progressBar}" aria-valuemin="0" aria-valuemax="100">
+                                {{progressBar}} %
+                            </div>
+                            
+                        </div>
+        
+                    </div>
+                    <div class="col-sm d-flex align-items-center" style="width: 200px;">
+                        <img *ngIf="!client?.photo && selectedPhoto && preview" id="selectedPhoto" src="{{preview}}" alt="" width="100%" height="180px" class="img-thumbnail rounded"/>
+                        <img *ngIf="client?.photo && !selectedPhoto" src="http://localhost:8080/api/clients/upload/img/{{client.photo}}" alt="" width="100%" height="180px" class="img-thumbnail rounded"/>
+                        <img *ngIf="!client?.photo && !selectedPhoto" src="http://localhost:8080/images/default.png" alt="" width="100%" height="180px" class="img-thumbnail rounded"/>
+                    </div>
+                </div>
+        
+            </div>
+        </div>
+        <div class="modal-footer">
+          <button (click)="closeModal()" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

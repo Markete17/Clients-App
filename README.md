@@ -34,6 +34,9 @@ etc... y cualquier otra configuración que contenga la palabra strict al comienz
 ### SweetAlert - Mandar alert más bonitos
 - npm install sweetalert2 --save
 
+## Angular Material
+- ng add @angular/material
+
 ## Backend
 
 ### Validar Form

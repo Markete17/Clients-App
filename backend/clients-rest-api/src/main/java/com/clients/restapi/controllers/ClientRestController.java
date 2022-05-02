@@ -1,22 +1,28 @@
 package com.clients.restapi.controllers;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
+
+import java.io.IOException;
+import java.net.MalformedURLException;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import java.util.stream.Collectors;
 
-import javax.persistence.Id;
 import javax.validation.Valid;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
 import org.springframework.dao.DataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,13 +31,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.clients.restapi.models.entities.Client;
 import com.clients.restapi.models.services.IClientService;
-
-import net.bytebuddy.asm.Advice.Return;
+import com.clients.restapi.models.services.IImageService;
 
 @CrossOrigin(origins = {"http://localhost:4200"}) //Con el Cross Origins se da permiso al servidor frontend a recoger los datos
 @RestController
@@ -40,11 +46,20 @@ public class ClientRestController {
 	
 	@Autowired
 	private IClientService clientService;
-	private Object err;
+	
+	@Autowired
+	private IImageService imageService;
+	
 	
 	@GetMapping("/clients")
 	public ResponseEntity<List<Client>> index(){
 		return new ResponseEntity<List<Client>>(clientService.findAll(),HttpStatus.OK);
+	}
+	
+	@GetMapping("/clients/page/{page}")
+	public ResponseEntity<Page<Client>> index(@PathVariable Integer page){
+		Pageable pageable = (Pageable) PageRequest.of(page, 4);
+		return new ResponseEntity<Page<Client>>(clientService.findAll(pageable),HttpStatus.OK);
 	}
 	
 	@GetMapping("/clients/{id}")
@@ -151,10 +166,14 @@ public class ClientRestController {
 		Map<String, Object> response = new HashMap<>();
 		try {
 			Client client = this.clientService.findById(id);
+			
 			if(client == null) {
 				response.put("message", "The client ID: ".concat(id.toString().concat(" does not exist in the database")));
 				return new ResponseEntity<>(response,HttpStatus.NOT_FOUND);
 			}
+			
+			imageService.delete(client.getPhoto());
+
 			this.clientService.delete(id);
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 			
@@ -164,5 +183,56 @@ public class ClientRestController {
 			return new ResponseEntity<>(response,HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 
+	}
+	
+	
+	@PostMapping("clients/upload")
+	public ResponseEntity<?> upload(@RequestParam("file") MultipartFile file, @RequestParam("id") Long id){
+		
+		Map<String, Object> response = new HashMap<>();
+		Client client = clientService.findById(id);
+		
+		if(!file.isEmpty()) {
+			String fileName = null;
+			try {
+				fileName = imageService.copy(file);
+			} catch (IOException e) {
+				response.put("message", "Error: The image "+fileName+ "has not upload");
+				response.put("error", e.getMessage().concat(": ").concat(e.getCause().getMessage()));
+				return new ResponseEntity<Map<String,Object>>(response,HttpStatus.INTERNAL_SERVER_ERROR);
+			}
+			
+			String namePreviousPhoto = client.getPhoto();
+			
+			imageService.delete(namePreviousPhoto);
+			
+			client.setPhoto(fileName);
+			clientService.save(client);
+			
+			response.put("client", client);
+			response.put("message", "The image "+fileName+ " has upload successfully");
+		}
+		
+		return new ResponseEntity<Map<String,Object>>(response,HttpStatus.CREATED);
+		
+	}
+	
+	@GetMapping("clients/upload/img/{namePhoto:.+}")
+	public ResponseEntity<Resource> showPhotoEntity(@PathVariable String namePhoto){
+	
+		Resource resource = null;
+		
+		try {
+			resource =  imageService.load(namePhoto);
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		}
+
+		HttpHeaders header = new HttpHeaders();
+		//Para forzar a descargar la imagen
+		header.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\""+resource.getFilename()+"\"");
+		
+		return new ResponseEntity<Resource>(resource,header,HttpStatus.OK);
+		
 	}
 }

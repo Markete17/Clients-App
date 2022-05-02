@@ -1,4 +1,6 @@
-<div class="card border-light mb-3">
+<app-detail *ngIf="selectedClient" [client]="selectedClient"></app-detail>
+
+<div class="card card-border-light mb-3">
     <h3 class="card-header text-center">Clients</h3>
     <div class="card-body text-primary">
         <h5 class="card-title">Clients List</h5>
@@ -11,7 +13,7 @@
         <table class="table table-bordered table-striped" *ngIf="clients?.length>0">
             <thead class="text-primary" class="text-center">
                 <tr>
-                    <th>id</th>
+                    <th>Photo</th>
                     <th>First Name</th>
                     <th>Last Name</th>
                     <th>Email</th>
@@ -22,11 +24,14 @@
             </thead>
             <tbody class="text-center">
                 <tr *ngFor="let client of clients">
-                    <td>{{client.id}}</td>
+                    <td>
+                        <img (click)="openModal(client)" style="cursor:pointer" *ngIf="client?.photo" src="http://localhost:8080/api/clients/upload/img/{{client.photo}}" width="64px" height="64px" class="img-thumbnail rounded"/>
+                        <img (click)="openModal(client)" style="cursor:pointer" *ngIf="!client?.photo" src="http://localhost:8080/images/default.png" width="64px" height="64px" class="img-thumbnail rounded"/>
+                    </td>
                     <td>{{client.firstName }}</td> <!--<td>{{client.firstName || uppercase }}</td> para formatear dentro de la plantilla y no en el component--> 
                     <td>{{client.lastName}}</td>
                     <td>{{client.email}}</td>
-                    <td>{{client.createAt}}</td>
+                    <td>{{client.createAt}}</td><!--<td>{{client.firstName || date: "EEEE d, MMMM yyyy" }} -->
                     <td>
                         <button type="button" name="button" [routerLink]="['/clients/form',client.id]" class="btn btn-warning">Edit</button>
                     </td>
@@ -36,6 +41,7 @@
                 </tr>
             </tbody>
         </table>
-
     </div>
+            <!-- Por tema asincrono hay que validar que exista ese paginator con ngIf-->
+            <app-paginator *ngIf="paginator" [paginator] = "paginator"></app-paginator>
   </div>

@@ -1,9 +1,9 @@
 package com.clients.restapi.models.dao;
 
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.clients.restapi.models.entities.Client;
 
-public interface IClientDAO extends CrudRepository<Client, Long> {
+public interface IClientDAO extends JpaRepository<Client, Long> {
 
 }

@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { Client } from './client';
 import { ClientService } from './client.service';
 import Swal from 'sweetalert2';
+import { ActivatedRoute } from '@angular/router';
+import { ModalService } from './detail/modal.service';
+import { of } from 'rxjs';
 
 @Component({
   selector: 'app-clients',
@@ -9,13 +12,40 @@ import Swal from 'sweetalert2';
 })
 export class ClientsComponent implements OnInit {
 
-  constructor(private clientService: ClientService) { }
+  constructor(private clientService: ClientService,
+    private activatedRoute:ActivatedRoute,
+    private modalService:ModalService) { }
 
   clients: Client[]
+  paginator:any;
+  selectedClient:Client;
 
   ngOnInit(): void {
-    this.clientService.getClients().subscribe(
-      clients => this.clients = clients
+    //On init solo se ejecuta una vez. Por lo tanto para detectar el cambio de pagina
+    //se necesita un observable: paramMap
+    this.activatedRoute.paramMap.subscribe( params =>{
+      //con el +delante transforma string a number
+      let page:number = +params.get('page')
+      if(!page){
+        page = 0
+      }
+      this.clientService.getClients(page).subscribe(
+      response => {
+        this.clients = response.content as Client[];
+        this.paginator = response;
+      }
+    )
+    })
+
+    this.modalService.notifyUpload.subscribe(
+      client => {
+        this.clients = this.clients.map(c => {
+          if(c.id === client.id){
+            c.photo = client.photo;
+          }
+          return c;
+        })
+      }
     )
   }
   delete(client:Client):void {
@@ -58,6 +88,11 @@ export class ClientsComponent implements OnInit {
         )
       }
     })
+  }
+  
+  openModal(client:Client){
+    this.selectedClient = client;
+    this.modalService.openModal();
   }
 
 }

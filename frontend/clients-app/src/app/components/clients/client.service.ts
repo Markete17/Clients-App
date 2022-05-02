@@ -6,6 +6,7 @@ import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
 import { formatDate,DatePipe,registerLocaleData } from '@angular/common';
 import localeES from '@angular/common/locales/es'
+import { HttpRequest,HttpEvent } from '@angular/common/http';
 
 @Injectable()
 export class ClientService {
@@ -16,11 +17,13 @@ export class ClientService {
   
   constructor(private http:HttpClient,private router:Router) { }
 
-  getClients(): Observable<Client[]>{
-    return this.http.get(this.urlEndPoint).pipe(
-      map( response => {
-        let clients = response as Client[];
-        return clients.map(c =>
+  getClients(page:number): Observable<any>{
+    return this.http.get(this.urlEndPoint + '/page/' + page).pipe(
+      tap( (response:any) =>{
+        (response.content as Client[]).forEach(c => {console.log(c)})
+      }),
+      map( (response:any) => {
+        (response.content as Client[]).map(c =>
         {
           c.firstName = c.firstName.toUpperCase();
           c.lastName = c.lastName.toUpperCase();
@@ -36,9 +39,10 @@ export class ClientService {
             //c.createAt = new DatePipe('es').transform(c.createAt,'EEEE dd, MMMM yyy')
           return c;
         });
+        return response
       }), /* Con el tap podemos hacer otra tarea a la vez que el map */
       tap(response => {
-        response.forEach(
+        (response.content as Client[]).forEach(
           c => {
             console.log(c)
           }
@@ -99,5 +103,17 @@ export class ClientService {
         return throwError(() => err);
       })
     )
+  }
+
+  uploadPhoto(file,id):Observable<HttpEvent<{}>>{
+    let formData = new FormData();
+    formData.append("file",file);
+    formData.append("id",id);
+    
+
+    // Para la barra de progreso se tiene que hacer con el httpRequest
+    const req = new HttpRequest('POST',`${this.urlEndPoint}/upload`,formData,{reportProgress:true});
+
+    return this.http.request(req);
   }
 }
