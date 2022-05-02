@@ -43,6 +43,7 @@ export class DetailComponent implements OnInit {
     const fileReader = new FileReader();
     
     fileReader.onload = e => this.preview = fileReader.result;
+    fileReader.onloadend= e => this.preview = fileReader.result;
 
     fileReader.readAsDataURL(this.selectedPhoto);
 
@@ -59,7 +60,6 @@ export class DetailComponent implements OnInit {
       .subscribe(event => {
         if(event.type === HttpEventType.UploadProgress){
           this.progressBar = Math.round((event.loaded/event.total)*100);
-          console.log(this.progressBar)
         } else if (event.type === HttpEventType.Response){
           let response: any = event.body;
           this.client = response.client as Client;

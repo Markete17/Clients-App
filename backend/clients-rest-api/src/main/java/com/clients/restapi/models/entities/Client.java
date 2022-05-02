@@ -4,9 +4,12 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -14,6 +17,8 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name="clients")
@@ -44,6 +49,16 @@ public class Client implements Serializable {
 	private Date createAt;
 	
 	private String photo;
+	
+	//La carga LAZY, cuando se llama al Get de la region es cuando va a cargar
+	
+	// @JoinColumn(name = "region_id") por defecto, 
+	//con JoinColumn pilla el nombre del atributo(region) y su clave primaria (id) =>region_id por lo que se puede omitir
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JsonIgnoreProperties({"hibernateLazyInitializer","handler"}) //Si la carga es lazy hay que ignorar estos atributos
+	@NotNull
+	private Region region;
 	
 	/*
 	@PrePersist //Antes de crear el objeto, el create at sera la fecha de hoy
@@ -97,6 +112,14 @@ public class Client implements Serializable {
 
 	public void setPhoto(String photo) {
 		this.photo = photo;
+	}
+
+	public Region getRegion() {
+		return region;
+	}
+
+	public void setRegion(Region region) {
+		this.region = region;
 	}
 
 }

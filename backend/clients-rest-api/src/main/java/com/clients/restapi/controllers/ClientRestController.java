@@ -50,7 +50,6 @@ public class ClientRestController {
 	@Autowired
 	private IImageService imageService;
 	
-	
 	@GetMapping("/clients")
 	public ResponseEntity<List<Client>> index(){
 		return new ResponseEntity<List<Client>>(clientService.findAll(),HttpStatus.OK);
@@ -147,6 +146,7 @@ public class ClientRestController {
 			updatedClient.setEmail(client.getEmail());
 			updatedClient.setFirstName(client.getFirstName());
 			updatedClient.setLastName(client.getLastName());
+			updatedClient.setRegion(client.getRegion());
 			response.put("message", "The client has updated successfully");
 			response.put("client", clientService.save(updatedClient));
 			
@@ -235,4 +235,5 @@ public class ClientRestController {
 		return new ResponseEntity<Resource>(resource,header,HttpStatus.OK);
 		
 	}
+
 }

@@ -3,6 +3,8 @@ import { Client } from './client';
 import { ClientService } from './client.service';
 import { Router,ActivatedRoute } from '@angular/router';
 import Swal from 'sweetalert2';
+import { RegionService } from '../regions/region.service';
+import { Region } from '../regions/region';
 
 @Component({
   selector: 'app-form',
@@ -10,14 +12,16 @@ import Swal from 'sweetalert2';
 })
 export class FormComponent implements OnInit {
 
-  constructor(private clientService: ClientService,private route:Router,private activatedRoute:ActivatedRoute) { }
+  constructor(private clientService: ClientService,private route:Router,private activatedRoute:ActivatedRoute, private regionService:RegionService) { }
   title:string = 'Create Client';
   client:Client=new Client();
+  regions:Region[];
 
   errors:string[];
 
   ngOnInit(): void {
     this.loadClient()
+    this.loadRegions();
   }
 
   loadClient():void{
@@ -29,6 +33,12 @@ export class FormComponent implements OnInit {
         )
       } 
     })
+  }
+
+  loadRegions():void{
+    this.regionService.getRegions().subscribe(
+      regions => this.regions = regions
+    );
   }
 
   create(){
@@ -87,6 +97,14 @@ export class FormComponent implements OnInit {
     complete: () => console.log(this.errors),
     }
       );
+  }
+
+  compareRegion(r1:Region,r2:Region):boolean{
+    //El primer r1 es la region de la iteracion y el r2 es la region que viene del edit
+    if(r1 === undefined && r2 === undefined){
+      return true;
+    }
+    return r1 === null || r2 === null || r1 === undefined || r2 === undefined ? false : r1.id===r2.id;
   }
 
 }

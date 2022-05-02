@@ -71,6 +71,19 @@
                 </div>
             </div>
 
+            <div class="form-group row mt-2">
+                <label for="region" class="col-form-label col-sm-2">Region</label>
+                <div class="col-sm-6">
+                    <!--Al ser un objecto, al editar, angular no detecta el region, hay que implementar
+                    una funcion en el compareRegion -->
+                    <select [compareWith]="compareRegion" type="date" class="form-control" [(ngModel)]="client.region" id="region" name="region" #region="ngModel">
+                        <option [ngValue]="undefined">Select Region</option>
+                        <option *ngFor="let region of regions" [ngValue]="region">{{region.name}}</option>
+                    </select>
+
+                </div>
+            </div>
+
 
             <div class="form-group row mt-2 float-none">
                 <div class="col-sm-6">
