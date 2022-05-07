@@ -110,3 +110,13 @@ INSERT INTO clients (first_name, last_name, email, create_at, region_id) VALUES(
 INSERT INTO clients (first_name, last_name, email, create_at, region_id) VALUES('Magma', 'Lee', 'magma.le32e@gmail.com', '2018-03-04',8);
 INSERT INTO clients (first_name, last_name, email, create_at, region_id) VALUES('Tornado', 'Roe', 'tornad23o.roe@gmail.com', '2018-03-05',8);
 INSERT INTO clients (first_name, last_name, email, create_at, region_id) VALUES('Jade', 'Doe', 'jane.d111oe@gmail.com', '2018-03-06',8);
+
+INSERT INTO users (username, password, enabled, first_name, last_name, email) VALUES ('marcosrm99','$2a$10$tf7k.GNE3U71e6iqkt6kP.WhQ/kYWaSSPu4/wG3OKKz7j3b/Bfdxe',true,'Marcos','Ruiz Muñoz','marcosrm99@gmail.com');
+INSERT INTO users (username, password, enabled, first_name, last_name, email) VALUES ('admin','$2a$10$OqDFg1sa45zXpT7VBZr1V.U9DobQ2QCW0v4C/OyWFeWmgNP/DJcNy',true,'Admin','Admin LastName','admin@admin.es');
+
+INSERT INTO roles (name) VALUES ('ROLE_USER');
+INSERT INTO roles (name) VALUES ('ROLE_ADMIN');
+
+INSERT INTO users_roles (user_id,role_id) VALUES (1,1);
+INSERT INTO users_roles (user_id,role_id) VALUES (2,1);
+INSERT INTO users_roles (user_id,role_id) VALUES (2,2);

@@ -22,12 +22,12 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name="clients")
-public class Client implements Serializable {
+public class Client implements Serializable {//Con Serializable permite convertir Java a JSON y almacenarlo en session http
 
 	private static final long serialVersionUID = 1L;
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.IDENTITY) //Incremental
 	private Long id;
 	
 	@Column(nullable = false)

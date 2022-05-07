@@ -22,6 +22,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -61,6 +62,7 @@ public class ClientRestController {
 		return new ResponseEntity<Page<Client>>(clientService.findAll(pageable),HttpStatus.OK);
 	}
 	
+	@Secured({"ROLE_USER","ROLE_ADMIN"})
 	@GetMapping("/clients/{id}")
 	public ResponseEntity<?> show(@PathVariable Long id) {
 		Client client = null;
@@ -80,6 +82,7 @@ public class ClientRestController {
 		return new ResponseEntity<>(client,HttpStatus.OK);
 	}
 	
+	@Secured("ROLE_ADMIN")
 	@PostMapping("/clients")
 	public ResponseEntity<?> create(@Valid @RequestBody Client client, BindingResult result) {
 		Map<String, Object> response = new HashMap<>();
@@ -114,6 +117,7 @@ public class ClientRestController {
 		}
 	}
 	
+	@Secured("ROLE_ADMIN")
 	@PutMapping("/clients/{id}")
 	public ResponseEntity<?> update(@PathVariable Long id,@Valid @RequestBody Client client, BindingResult result){
 		Map<String, Object> response = new HashMap<>();
@@ -161,6 +165,7 @@ public class ClientRestController {
 
 	}
 	
+	@Secured("ROLE_ADMIN")
 	@DeleteMapping("/clients/{id}")
 	public ResponseEntity<?> delete(@PathVariable Long id){
 		Map<String, Object> response = new HashMap<>();
@@ -185,7 +190,7 @@ public class ClientRestController {
 
 	}
 	
-	
+	@Secured({"ROLE_USER","ROLE_ADMIN"})
 	@PostMapping("clients/upload")
 	public ResponseEntity<?> upload(@RequestParam("file") MultipartFile file, @RequestParam("id") Long id){
 		
