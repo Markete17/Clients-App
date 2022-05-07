@@ -1,0 +1,26 @@
+<div class="d-flex justify-content-center">
+
+<ul *ngIf="pages?.length>0" class="pagination">
+
+    <li [ngClass]="paginator.first?'disabled page-item':'page-item'">
+        <a class="page-link mx-1" [routerLink]="['/clients/page',0]">First Page</a>
+    </li>
+
+    <li class="page-item" *ngIf="!paginator.first">
+        <a class="page-link" [routerLink]="['/clients/page',paginator.number-1]">&laquo;</a>
+    </li>
+
+    <li *ngFor="let pageNum of pages" class="page-item" [ngClass]="pageNum-1 === paginator.number?'disabled':''">
+        <a *ngIf="pageNum-1 === paginator.number" class="page-link text-white bg-primary" [routerLink]="['/clients/page',pageNum-1]">{{pageNum}}</a>
+        <a *ngIf="pageNum-1 !== paginator.number" class="page-link" [routerLink]="['/clients/page',pageNum-1]">{{pageNum}}</a>
+    </li>
+
+    <li class="page-item" *ngIf="!paginator.last">
+        <a class="page-link" [routerLink]="['/clients/page',paginator.number+1]">&raquo;</a>
+    </li>
+
+    <li [ngClass]="paginator.last?'disabled page-item':'page-item'">
+        <a class="page-link mx-1" [routerLink]="['/clients/page',paginator.totalPages-1]">Last Page</a>
+    </li>
+</ul>
+</div>

@@ -5,17 +5,51 @@ import { map,catchError,Observable,throwError,tap} from 'rxjs';
 import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
 import { formatDate,DatePipe,registerLocaleData } from '@angular/common';
-import localeES from '@angular/common/locales/es'
-import { HttpRequest,HttpEvent } from '@angular/common/http';
+//import localeES from '@angular/common/locales/es'
+import { HttpRequest,HttpEvent } from '@angular/common/http'
+import { LoginService } from '../users/login.service';
 
 @Injectable()
 export class ClientService {
   private urlEndPoint:string = 'http://localhost:8080/api/clients'
+  
+
+  
+  constructor(private http:HttpClient,private router:Router,private loginService:LoginService) { }
+
+ /* 
+
   private httpHeaders = new HttpHeaders({
     'Content-Type': 'application/json'
   })
-  
-  constructor(private http:HttpClient,private router:Router) { }
+ Con el HttpInterceptor se gestiona esto
+ private addAuthorizationHeader(){
+    let token = this.loginService.token;
+    if(token!=null){
+      return this.httpHeaders.append('Authorization','Bearer '+token)
+    }
+    return this.httpHeaders;
+  }
+  */
+
+ /* Lo maneja el auth interceptor
+ private isNotAuthorized(e):boolean{
+    if(e.status==401){
+      if(this.loginService.isAuthenticated()){
+        this.loginService.logout()
+      }
+      this.router.navigate(['/login']);
+      return true;
+    } 
+    if(e.status==403){
+      Swal.fire('Denied Access',`Hi ${this.loginService.user.username} you do not have access in this resource`,'warning')
+      this.router.navigate(['/clients']);
+      return true;
+    } 
+    
+      return false;
+  }
+  */
 
   getClients(page:number): Observable<any>{
     return this.http.get(this.urlEndPoint + '/page/' + page).pipe(
@@ -55,7 +89,11 @@ export class ClientService {
   getClient(id):Observable<Client>{
     return this.http.get<Client>(`${this.urlEndPoint}/${id}`).pipe(
       catchError(e => {
-      this.router.navigate(['/clients'])
+      if(e.status!=401 && e.error.message){
+        this.router.navigate(['/clients'])
+      } else {
+        this.router.navigate(['/login'])
+      }
       Swal.fire('Error while editing ',e.error.message,'error');
       const err = new Error();
       console.log(err)
@@ -65,7 +103,7 @@ export class ClientService {
 
   /*La peticion devuelve {client y message por eso es any} */
   create(client:Client):Observable<any>{
-    return this.http.post<any>(this.urlEndPoint,client,{headers:this.httpHeaders}).pipe(
+    return this.http.post<any>(this.urlEndPoint,client).pipe(
       catchError(e => {
         if(e.status === 400){
           return throwError(() => e)
@@ -78,7 +116,7 @@ export class ClientService {
   }
   /*Se puede hacer de otra forma para devolver Observable<Client> */
   update(client:Client):Observable<Client>{
-    return this.http.put<any>(`${this.urlEndPoint}/${client.id}`,client,{headers:this.httpHeaders}).pipe(
+    return this.http.put<any>(`${this.urlEndPoint}/${client.id}`,client).pipe(
       map((response:any) => response.client as Client),
       catchError(e => {
         if(e.status === 400){
@@ -93,7 +131,7 @@ export class ClientService {
   }
   /*Tambien se puede hacer con pipe */
   delete(id):Observable<Client>{
-    return this.http.delete(`${this.urlEndPoint}/${id}`,{headers:this.httpHeaders}).pipe(
+    return this.http.delete(`${this.urlEndPoint}/${id}`).pipe(
       map(response => response as Client)
     ).pipe(
       catchError(e => {
@@ -110,10 +148,19 @@ export class ClientService {
     formData.append("file",file);
     formData.append("id",id);
     
+    let httpHeaders = new HttpHeaders();
+    let token = this.loginService.token;
+    if(token!=null){
+      httpHeaders = httpHeaders.append('Authorization','Bearer '+token);
+    }
 
     // Para la barra de progreso se tiene que hacer con el httpRequest
-    const req = new HttpRequest('POST',`${this.urlEndPoint}/upload`,formData,{reportProgress:true});
+    const req = new HttpRequest('POST',`${this.urlEndPoint}/upload`,formData,{reportProgress:true})
 
-    return this.http.request(req);
+    return this.http.request(req).pipe(
+      catchError(e => {
+          return throwError(() => e)
+      })
+    );
   }
 }

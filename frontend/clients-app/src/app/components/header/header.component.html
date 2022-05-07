@@ -22,10 +22,18 @@
             </ul>
           </li>
         </ul>
-        <form class="d-flex">
-          <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-          <button class="btn btn-outline-primary" type="submit">Search</button>
-        </form>
+        <ul class="navbar-nav navbar-right mx-4">
+          <li *ngIf="!loginService.isAuthenticated()"><a [routerLink]="['/login']" class="btn btn-outline-primary">Login</a></li>
+          
+          <li *ngIf="loginService.isAuthenticated()" class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              {{loginService.user.username}}
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <li><button (click)="logout()" class="dropdown-item">Sign Out</button></li>
+            </ul>
+          </li>
+        </ul>
       </div>
     </div>
   </nav>

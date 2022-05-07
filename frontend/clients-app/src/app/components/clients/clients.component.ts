@@ -5,6 +5,7 @@ import Swal from 'sweetalert2';
 import { ActivatedRoute } from '@angular/router';
 import { ModalService } from './detail/modal.service';
 import { of } from 'rxjs';
+import { LoginService } from '../users/login.service';
 
 @Component({
   selector: 'app-clients',
@@ -14,7 +15,8 @@ export class ClientsComponent implements OnInit {
 
   constructor(private clientService: ClientService,
     private activatedRoute:ActivatedRoute,
-    private modalService:ModalService) { }
+    private modalService:ModalService,
+    public loginService: LoginService) { }
 
   clients: Client[]
   paginator:any;
@@ -70,13 +72,17 @@ export class ClientsComponent implements OnInit {
         this.clientService.delete(client.id).subscribe(
           response => {
             this.clients = this.clients.filter(c=> c!== client)
+            if(response instanceof Client){
+              swalWithBootstrapButtons.fire(
+                'Deleted!',
+                'Your file has been deleted.',
+                'success'
+              )
+            }
           }
+          
         )
-        swalWithBootstrapButtons.fire(
-          'Deleted!',
-          'Your file has been deleted.',
-          'success'
-        )
+
       } else if (
         /* Read more about handling dismissals below */
         result.dismiss === Swal.DismissReason.cancel

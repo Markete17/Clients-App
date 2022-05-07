@@ -5,6 +5,7 @@ import Swal from 'sweetalert2';
 import { HttpEventType } from '@angular/common/http';
 import { Input } from '@angular/core';
 import { ModalService } from './modal.service';
+import { LoginService } from '../../users/login.service';
 
 @Component({
   selector: 'app-detail',
@@ -14,7 +15,7 @@ import { ModalService } from './modal.service';
 export class DetailComponent implements OnInit {
 
   constructor(private clientService:ClientService,
-    public modalService: ModalService) { }
+    public modalService: ModalService, public loginService:LoginService) { }
 
   @Input() client:Client;
   title:string = "Client Detail"

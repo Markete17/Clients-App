@@ -8,19 +8,25 @@ import { DirectiveComponent } from './components/directive/directive.component';
 import { ClientsComponent } from './components/clients/clients.component';
 import { ClientService } from './components/clients/client.service';
 import { RouterModule,Routes } from '@angular/router';
-import {HttpClientModule} from '@angular/common/http';
+import {HttpClientModule, HTTP_INTERCEPTORS} from '@angular/common/http';
 import { FormComponent } from './components/clients/form.component'
 import { FormsModule } from '@angular/forms';
-import { PaginatorComponent } from './paginator/paginator.component';
+import { PaginatorComponent } from './components/paginator/paginator.component';
 import { DetailComponent } from './components/clients/detail/detail.component';
+import { LoginComponent } from './components/users/login.component';
+import { AuthGuard } from './components/users/guards/auth.guard';
+import { RoleGuard } from './components/users/guards/role.guard';
+import { TokenInterceptor } from './components/users/interceptors/token.interceptor';
+import { AuthInterceptor } from './components/users/interceptors/auth.interceptor';
 
 const routes: Routes = [
   {path: '', redirectTo:'clients', pathMatch:'full'},
   {path: 'directives', component:DirectiveComponent},
   {path: 'clients', component:ClientsComponent},
   {path: 'clients/page/:page', component:ClientsComponent},
-  {path: 'clients/form', component:FormComponent},
-  {path: 'clients/form/:id', component:FormComponent},
+  {path: 'clients/form', component:FormComponent,canActivate:[AuthGuard,RoleGuard],data:{role: 'ROLE_ADMIN'}},
+  {path: 'clients/form/:id', component:FormComponent,canActivate:[AuthGuard, RoleGuard],data:{role: 'ROLE_ADMIN'}},
+  {path: 'login', component:LoginComponent},
 ]
 
 
@@ -33,7 +39,8 @@ const routes: Routes = [
     ClientsComponent,
     FormComponent,
     PaginatorComponent,
-    DetailComponent
+    DetailComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
@@ -42,7 +49,12 @@ const routes: Routes = [
     FormsModule
   ],
   /*Con LOCALE_ID para formatear dentro de los html */
-  providers: [ClientService,{provide: LOCALE_ID,useValue: 'en-US'}],
+  providers: [
+    ClientService,
+    {provide: LOCALE_ID,useValue: 'en-US'},
+    {provide: HTTP_INTERCEPTORS, useClass:TokenInterceptor, multi:true},
+    {provide: HTTP_INTERCEPTORS, useClass:AuthInterceptor, multi:true}
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

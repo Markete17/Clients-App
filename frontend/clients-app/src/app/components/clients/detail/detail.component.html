@@ -21,7 +21,7 @@
                                 <li class="list-group-item"><b>Region</b><br> {{client.region.name}}</li>
                             </ul>
                         </div>
-                        <div class="input-group mx-auto" style="width: 200px;">
+                        <div  class="input-group mx-auto" style="width: 200px;" *ngIf="loginService.hasRole('ROLE_ADMIN')">
                             <input (change)="selectPhoto($event)" type="file" class="file-select" id="uploadImage" aria-describedby="inputGroupFileAddon04" aria-label="Upload">
                             <button [disabled]="!selectedPhoto"(click)="upload()" class="btn btn-outline-primary" type="button" id="inputGroupFileAddon04">Upload</button>
                         </div>
