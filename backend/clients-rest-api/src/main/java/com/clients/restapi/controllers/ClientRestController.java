@@ -40,7 +40,7 @@ import com.clients.restapi.models.entities.Client;
 import com.clients.restapi.models.services.IClientService;
 import com.clients.restapi.models.services.IImageService;
 
-@CrossOrigin(origins = {"http://localhost:4200"}) //Con el Cross Origins se da permiso al servidor frontend a recoger los datos
+@CrossOrigin(origins = {"http://localhost:4200","http://localhost:8089"}) //Con el Cross Origins se da permiso al servidor frontend a recoger los datos
 @RestController
 @RequestMapping("/api")
 public class ClientRestController {

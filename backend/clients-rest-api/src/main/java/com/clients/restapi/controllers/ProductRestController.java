@@ -15,7 +15,7 @@ import com.clients.restapi.models.entities.Product;
 import com.clients.restapi.models.services.IProductService;
 
 @RestController
-@CrossOrigin(origins = {"http://localhost:4200"})
+@CrossOrigin(origins = {"http://localhost:4200","http://localhost:8089"})
 @RequestMapping("/api")
 public class ProductRestController {
 	

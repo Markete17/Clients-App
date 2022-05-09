@@ -15,7 +15,7 @@ export class RegionService {
   
 
   
-  constructor(private http:HttpClient,private router:Router,private loginService:LoginService) { }
+  constructor(private http:HttpClient) { }
 
   /*
   private httpHeaders = new HttpHeaders({

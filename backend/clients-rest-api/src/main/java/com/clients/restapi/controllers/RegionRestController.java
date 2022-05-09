@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.clients.restapi.models.entities.Region;
 import com.clients.restapi.models.services.IRegionService;
 
-@CrossOrigin(origins = {"http://localhost:4200"}) //Con el Cross Origins se da permiso al servidor frontend a recoger los datos
+@CrossOrigin(origins = {"http://localhost:4200","http://localhost:8089"}) //Con el Cross Origins se da permiso al servidor frontend a recoger los datos
 @RestController
 @RequestMapping("/api")
 public class RegionRestController {

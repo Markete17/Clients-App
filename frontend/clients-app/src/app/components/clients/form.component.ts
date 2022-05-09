@@ -14,7 +14,7 @@ export class FormComponent implements OnInit {
 
   constructor(private clientService: ClientService,private route:Router,private activatedRoute:ActivatedRoute, private regionService:RegionService) { }
   title:string = 'Create Client';
-  client:Client=new Client();
+  public client:Client=new Client();
   regions:Region[];
 
   errors:string[];

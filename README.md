@@ -47,3 +47,14 @@ Para validar es muy importante agregar la siguiente dependencia en el pom.xml de
 		<artifactId>spring-boot-starter-validation</artifactId>
 	</dependency>
 	</code></pre>
+
+## Desplegar backend
+Dirigirse a la carpeta del proyecto backend donde esté el archivo mvnw.cmd y ejecutar:
+ - mvnw.cmd clean package
+ - java -jar .\target\clients-rest-api-0.0.1-SNAPSHOT.jar
+
+## Desplegar frontend
+- ng build --prod
+- en dist npm init
+- npm install --save
+- crear el archivo server.js

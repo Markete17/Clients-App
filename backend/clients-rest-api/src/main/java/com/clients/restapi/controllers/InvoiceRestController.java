@@ -17,7 +17,7 @@ import com.clients.restapi.models.entities.Invoice;
 import com.clients.restapi.models.services.IInvoiceService;
 
 @RestController
-@CrossOrigin(origins = {"http://localhost:4200"})
+@CrossOrigin(origins = {"http://localhost:4200","http://localhost:8089"})
 @RequestMapping("/api")
 public class InvoiceRestController {
 	
