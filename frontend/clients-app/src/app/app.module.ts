@@ -24,6 +24,7 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import {MatInputModule} from '@angular/material/input';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ChatComponent } from './components/chat/chat.component';
 
 const routes: Routes = [
   {path: '', redirectTo:'clients', pathMatch:'full'},
@@ -35,6 +36,7 @@ const routes: Routes = [
   {path: 'login', component:LoginComponent},
   {path: 'invoices/:id', component:InvoiceDetailComponent, canActivate:[AuthGuard,RoleGuard],data:{role: 'ROLE_USER'}},
   {path: 'invoices/form/:clientId', component:InvoiceComponent, canActivate:[AuthGuard,RoleGuard],data:{role: 'ROLE_ADMIN'}},
+  {path: 'chat', component:ChatComponent, canActivate:[AuthGuard,RoleGuard],data:{role: 'ROLE_USER'}},
 ]
 
 
@@ -50,7 +52,8 @@ const routes: Routes = [
     DetailComponent,
     LoginComponent,
     InvoiceDetailComponent,
-    InvoiceComponent
+    InvoiceComponent,
+    ChatComponent
   ],
   imports: [
     BrowserModule,

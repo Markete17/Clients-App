@@ -58,3 +58,8 @@ Dirigirse a la carpeta del proyecto backend donde esté el archivo mvnw.cmd y ej
 - en dist npm init
 - npm install --save
 - crear el archivo server.js
+
+## Descargar stomp
+- npm install @stomp/stompjs@5.2.0 --save
+- npm i sockjs-client --save
+- npm i @types/sockjs-client --save-dev
