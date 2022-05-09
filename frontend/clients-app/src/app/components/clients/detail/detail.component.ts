@@ -6,6 +6,8 @@ import { HttpEventType } from '@angular/common/http';
 import { Input } from '@angular/core';
 import { ModalService } from './modal.service';
 import { LoginService } from '../../users/login.service';
+import { InvoiceService } from '../../invoices/services/invoice.service';
+import { Invoice } from '../../invoices/models/invoice';
 
 @Component({
   selector: 'app-detail',
@@ -15,7 +17,9 @@ import { LoginService } from '../../users/login.service';
 export class DetailComponent implements OnInit {
 
   constructor(private clientService:ClientService,
-    public modalService: ModalService, public loginService:LoginService) { }
+    public modalService: ModalService, 
+    public loginService:LoginService, 
+    private invoiceService:InvoiceService) { }
 
   @Input() client:Client;
   title:string = "Client Detail"
@@ -81,6 +85,51 @@ export class DetailComponent implements OnInit {
     this.selectedPhoto = null;
     this.progressBar = null;
     this.preview = null;
+  }
+
+  delete(invoice:Invoice):void{
+    const swalWithBootstrapButtons = Swal.mixin({
+      customClass: {
+        confirmButton: 'btn btn-success',
+        cancelButton: 'btn btn-danger'
+      },
+      buttonsStyling: false
+    })
+    
+    swalWithBootstrapButtons.fire({
+      title: 'Are you sure?',
+      text: `Are you sure you want to delete the invoice ${invoice.description} ?`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, delete it!',
+      cancelButtonText: 'No, cancel!',
+      reverseButtons: true
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.invoiceService.delete(invoice.id).subscribe(
+          response => {
+            this.client.invoices = this.client.invoices.filter(i=> i!== invoice)
+              swalWithBootstrapButtons.fire(
+                'Deleted!',
+                `The invoice ${invoice.description} has been deleted.`,
+                'success'
+              )
+            
+          }
+          
+        )
+
+      } else if (
+        /* Read more about handling dismissals below */
+        result.dismiss === Swal.DismissReason.cancel
+      ) {
+        swalWithBootstrapButtons.fire(
+          'Cancelled',
+          'Your imaginary file is safe :)',
+          'error'
+        )
+      }
+    })
   }
 
 }

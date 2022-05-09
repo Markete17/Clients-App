@@ -1,15 +1,18 @@
 package com.clients.restapi.models.entities;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -60,11 +63,20 @@ public class Client implements Serializable {//Con Serializable permite converti
 	@NotNull
 	private Region region;
 	
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "client", cascade = CascadeType.ALL)
+	@JsonIgnoreProperties(value = {"client","hibernateLazyInitializer","handler"}, allowSetters = true)
+	
+	private List<Invoice> invoices;
+	
 	/*
 	@PrePersist //Antes de crear el objeto, el create at sera la fecha de hoy
 	public void prePersist() {
 		createAt = new Date();
 	}*/
+	
+	public Client() {
+		this.invoices = new ArrayList<>();
+	}
 	
 	public Long getId() {
 		return id;
@@ -120,6 +132,14 @@ public class Client implements Serializable {//Con Serializable permite converti
 
 	public void setRegion(Region region) {
 		this.region = region;
+	}
+
+	public List<Invoice> getInvoices() {
+		return invoices;
+	}
+
+	public void setInvoices(List<Invoice> invoices) {
+		this.invoices = invoices;
 	}
 
 }

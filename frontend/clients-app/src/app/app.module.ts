@@ -10,7 +10,7 @@ import { ClientService } from './components/clients/client.service';
 import { RouterModule,Routes } from '@angular/router';
 import {HttpClientModule, HTTP_INTERCEPTORS} from '@angular/common/http';
 import { FormComponent } from './components/clients/form.component'
-import { FormsModule } from '@angular/forms';
+import { FormsModule,ReactiveFormsModule } from '@angular/forms';
 import { PaginatorComponent } from './components/paginator/paginator.component';
 import { DetailComponent } from './components/clients/detail/detail.component';
 import { LoginComponent } from './components/users/login.component';
@@ -18,6 +18,12 @@ import { AuthGuard } from './components/users/guards/auth.guard';
 import { RoleGuard } from './components/users/guards/role.guard';
 import { TokenInterceptor } from './components/users/interceptors/token.interceptor';
 import { AuthInterceptor } from './components/users/interceptors/auth.interceptor';
+import { InvoiceDetailComponent } from './components/invoices/invoice-detail.component';
+import { InvoiceComponent } from './components/invoices/invoice.component';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
+import {MatInputModule} from '@angular/material/input';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 const routes: Routes = [
   {path: '', redirectTo:'clients', pathMatch:'full'},
@@ -27,6 +33,8 @@ const routes: Routes = [
   {path: 'clients/form', component:FormComponent,canActivate:[AuthGuard,RoleGuard],data:{role: 'ROLE_ADMIN'}},
   {path: 'clients/form/:id', component:FormComponent,canActivate:[AuthGuard, RoleGuard],data:{role: 'ROLE_ADMIN'}},
   {path: 'login', component:LoginComponent},
+  {path: 'invoices/:id', component:InvoiceDetailComponent, canActivate:[AuthGuard,RoleGuard],data:{role: 'ROLE_USER'}},
+  {path: 'invoices/form/:clientId', component:InvoiceComponent, canActivate:[AuthGuard,RoleGuard],data:{role: 'ROLE_ADMIN'}},
 ]
 
 
@@ -40,13 +48,20 @@ const routes: Routes = [
     FormComponent,
     PaginatorComponent,
     DetailComponent,
-    LoginComponent
+    LoginComponent,
+    InvoiceDetailComponent,
+    InvoiceComponent
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     RouterModule.forRoot(routes),
     HttpClientModule,
-    FormsModule
+    FormsModule,
+    MatFormFieldModule,
+    MatAutocompleteModule,
+    ReactiveFormsModule,
+    MatInputModule,BrowserAnimationsModule,MatFormFieldModule
   ],
   /*Con LOCALE_ID para formatear dentro de los html */
   providers: [

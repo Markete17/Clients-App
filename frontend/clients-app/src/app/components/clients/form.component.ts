@@ -72,6 +72,7 @@ export class FormComponent implements OnInit {
   }
 
   update(){
+    this.client.invoices = null; //Para solucionar el error
     this.clientService.update(this.client)
     .subscribe( {
       next: client => {

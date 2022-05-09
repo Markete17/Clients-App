@@ -120,3 +120,20 @@ INSERT INTO roles (name) VALUES ('ROLE_ADMIN');
 INSERT INTO users_roles (user_id,role_id) VALUES (1,1);
 INSERT INTO users_roles (user_id,role_id) VALUES (2,1);
 INSERT INTO users_roles (user_id,role_id) VALUES (2,2);
+
+INSERT INTO products (name, price, create_at) VALUES ('Panasonic Screen LCD',2500,NOW());
+INSERT INTO products (name, price, create_at) VALUES ('Sony Digital Camera',7400,NOW());
+INSERT INTO products (name, price, create_at) VALUES ('Apple iPod',750,NOW());
+INSERT INTO products (name, price, create_at) VALUES ('Sony Notebook Z',350,NOW());
+INSERT INTO products (name, price, create_at) VALUES ('Hewlett Packard Multifunctional',14,NOW());
+INSERT INTO products (name, price, create_at) VALUES ('Bianchi Aro Bycicle',600,NOW());
+INSERT INTO products (name, price, create_at) VALUES ('MSI Notebook i7',1200,NOW());
+
+INSERT INTO invoices (description, observation, client_id, create_at) VALUES ('Office Invoice',null,1,NOW());
+INSERT INTO invoices_items (amount, invoice_id, product_id) VALUES (1,1,1);
+INSERT INTO invoices_items (amount, invoice_id, product_id) VALUES (2,1,4);
+INSERT INTO invoices_items (amount, invoice_id, product_id) VALUES (1,1,5);
+INSERT INTO invoices_items (amount, invoice_id, product_id) VALUES (1,1,7);
+
+INSERT INTO invoices (description, observation, client_id, create_at) VALUES ('Bycicle Invoice','Important Note',1,NOW());
+INSERT INTO invoices_items (amount, invoice_id, product_id) VALUES (3,2,6);

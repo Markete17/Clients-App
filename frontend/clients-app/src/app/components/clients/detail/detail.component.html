@@ -40,6 +40,36 @@
                         <img *ngIf="!client?.photo && !selectedPhoto" src="http://localhost:8080/images/default.png" alt="" width="100%" height="180px" class="img-thumbnail rounded"/>
                     </div>
                 </div>
+                <div class="row mt-2" *ngIf="loginService.hasRole('ROLE_ADMIN')">
+                    <button type="button" name="button" [routerLink]="['/invoices/form',client.id]" class="btn btn-success btn-sm">Create Invoice</button>
+                </div>
+                <br>
+                <div class="row">
+                    <h2>Invoices</h2>
+                    <div *ngIf="client.invoices.length==0" class="alert alert-info my-4">
+                        The client {{client.firstName}} do not has invoices
+                    </div>
+                    <table *ngIf="client.invoices.length>0" class="table table-bordered table-striped my-4">
+                        <thead>
+                            <th>ID</th>
+                            <th>Description</th>
+                            <th>Date</th>
+                            <th>Total</th>
+                            <th>Detail</th>
+                            <th *ngIf="loginService.hasRole('ROLE_ADMIN')">Delete</th>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let invoice of client.invoices">
+                                <td>{{invoice.id}}</td>
+                                <td>{{invoice.description}}</td>
+                                <td>{{invoice.createAt}}</td>
+                                <td>€ {{invoice.total}}</td>
+                                <td *ngIf="loginService.hasRole('ROLE_USER')"><button class="btn btn-primary btn-sm" type="button" [routerLink]="['/invoices',invoice.id]">Show</button></td>
+                                <td *ngIf="loginService.hasRole('ROLE_ADMIN')"><button (click)="delete(invoice)" class="btn btn-danger btn-sm" type="button">Delete</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
         
             </div>
         </div>

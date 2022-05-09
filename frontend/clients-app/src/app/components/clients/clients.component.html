@@ -3,7 +3,7 @@
 <div class="card card-border-light mb-3">
     <h3 class="card-header text-center">Clients</h3>
     <div class="card-body text-primary">
-        <h5 class="card-title">Clients List</h5>
+        <h2 class="card-title">Clients List</h2>
     <div class="text-center">
         <button *ngIf="loginService.hasRole('ROLE_USER')" [routerLink]="['/clients/form']" class="btn btn-rounded btn-primary mb-2" type="button">Create client</button>
     </div>
@@ -18,13 +18,14 @@
                     <th>Last Name</th>
                     <th>Email</th>
                     <th>Date</th>
+                    <th *ngIf="loginService.hasRole('ROLE_ADMIN')">Create Invoice</th>
                     <th *ngIf="loginService.hasRole('ROLE_ADMIN')">Edit</th>
                     <th *ngIf="loginService.hasRole('ROLE_ADMIN')">Delete</th>
                 </tr>
             </thead>
             <tbody class="text-center">
                 <tr *ngFor="let client of clients">
-                    <td *ngIf="loginService.hasRole('ROLE_USER')">
+                    <td *ngIf="loginService.hasRole('ROLE_USER')"> 
                         <img (click)="openModal(client)" style="cursor:pointer" *ngIf="client?.photo" src="http://localhost:8080/api/clients/upload/img/{{client.photo}}" width="64px" height="64px" class="img-thumbnail rounded"/>
                         <img (click)="openModal(client)" style="cursor:pointer" *ngIf="!client?.photo" src="http://localhost:8080/images/default.png" width="64px" height="64px" class="img-thumbnail rounded"/>
                     </td>
@@ -32,6 +33,7 @@
                     <td>{{client.lastName}}</td>
                     <td>{{client.email}}</td>
                     <td>{{client.createAt}}</td><!--<td>{{client.firstName || date: "EEEE d, MMMM yyyy" }} -->
+                    <td *ngIf="loginService.hasRole('ROLE_ADMIN')"><button type="button" name="button" [routerLink]="['/invoices/form',client.id]" class="btn btn-success">Create</button></td>
                     <td *ngIf="loginService.hasRole('ROLE_ADMIN')">
                         <button type="button" name="button" [routerLink]="['/clients/form',client.id]" class="btn btn-warning">Edit</button>
                     </td>
