@@ -19,6 +19,17 @@ public class Product implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
+	public Product() {
+	}
+
+	public Product(Long id, String name, Double price, Date createAt) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.price = price;
+		this.createAt = createAt;
+	}
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;

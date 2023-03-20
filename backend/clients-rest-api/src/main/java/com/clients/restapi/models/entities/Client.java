@@ -28,7 +28,24 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 public class Client implements Serializable {//Con Serializable permite convertir Java a JSON y almacenarlo en session http
 
 	private static final long serialVersionUID = 1L;
-	
+		
+	public Client(Long id,
+			@NotEmpty(message = "is required") @Size(min = 4, max = 12, message = "First Name must have at least 4 characters") String firstName,
+			@NotEmpty(message = "is required") String lastName,
+			@Email(message = "has an invalid format") @NotEmpty(message = "is required") String email,
+			@NotNull(message = "must not be null") Date createAt, String photo, @NotNull Region region,
+			List<Invoice> invoices) {
+		super();
+		this.id = id;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.email = email;
+		this.createAt = createAt;
+		this.photo = photo;
+		this.region = region;
+		this.invoices = invoices;
+	}
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY) //Incremental
 	private Long id;

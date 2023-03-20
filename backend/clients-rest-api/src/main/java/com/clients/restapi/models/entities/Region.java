@@ -15,6 +15,15 @@ public class Region implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
+	public Region() {
+		
+	}
+
+	public Region(Long id, @NotNull @NotNull(message = "must not be null") String name) {
+		super();
+		this.id = id;
+		this.name = name;
+	}
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

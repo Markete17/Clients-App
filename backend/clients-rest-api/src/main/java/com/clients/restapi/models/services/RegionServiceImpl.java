@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import com.clients.restapi.models.dao.IRegionDAO;
 import com.clients.restapi.models.entities.Region;
 
-@Service
+@Service("regionServiceImpl")
 public class RegionServiceImpl implements IRegionService {
 	
 	@Autowired

@@ -9,7 +9,7 @@ import com.clients.restapi.models.dao.IProductDAO;
 import com.clients.restapi.models.entities.Product;
 
 @Service
-public class ProductService implements IProductService {
+public class ProductServiceImpl implements IProductService {
 
 	@Autowired
 	private IProductDAO productDAO;
