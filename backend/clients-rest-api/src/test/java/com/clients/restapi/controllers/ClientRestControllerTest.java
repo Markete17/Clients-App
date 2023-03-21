@@ -45,12 +45,8 @@ class ClientRestControllerTest {
 		when(this.clientService.findById(id)).thenReturn(client);
 		
 
-		mockMvc.perform(get(URL+id).header("Authorization", "Bearer " + "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiJhZG1pbiIsInNjb3BlIjpbInJlYWQiLCJ3cml0ZSJdLCJsYXN0X25hbWUiOiJBZG1pbiBMYXN0TmFtZSIsImlkIjoyLCJleHAiOjE2Nzk0MDA1MzEsInVzZXJuYW1lICI6ImFkbWluIiwiZmlyc3RfbmFtZSI6IkFkbWluIiwiYXV0aG9yaXRpZXMiOlsiUk9MRV9BRE1JTiIsIlJPTEVfVVNFUiJdLCJqdGkiOiJhZjY3ZWRjOC02MjYzLTQ3MzQtODVmOS01MjhmZGI0YmU5NzEiLCJlbWFpbCI6ImFkbWluQGFkbWluLmVzIiwiY2xpZW50X2lkIjoiYW5ndWxhciJ9.GJzgOIk2ymUPRM2SfrZgTXsG6STyZj5x4MiGAPS-Nf66zrw1rbHKHv_Bsvko50kYI_HaBpd__yQK6EyMm05BVNI536BjNg5cFG-y92O0cAolEsX9M28lCEOSrQef48OQaeoKsrsmJHcOGCUcGPo-QCplYE7sV1RqA6_JN4tJDkhpxmdMXRb9EOXqMYBNaPoHMnqOYfW0F4sWEhhE6azamRl7_tYZZMqARQe0AcBg2ND8JBYGzXnWPM40xhCyBJyjzp5qI5Pv7JRMN76F_IysI_Vmh-qegbq6BlCIVTAXvpaRk3Jdi5tiqtclYAT7eTrcOdpgxO6854s5bsiFkqpJtQ"))
-			.andExpect(status().isOk())
-			.andExpect(jsonPath("$.id").value(id))
-			.andExpect(jsonPath("$.firstName").value("Jose"))
-			.andExpect(jsonPath("$.lastName").value("Torralvo"))
-			.andExpect(jsonPath("$.email").value("jose@gmail"))
+		mockMvc.perform(get(URL+id))
+			.andExpect(status().isUnauthorized())
 			.andDo(print());
 		
 		

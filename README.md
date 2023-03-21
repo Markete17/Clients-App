@@ -63,3 +63,40 @@ Dirigirse a la carpeta del proyecto backend donde esté el archivo mvnw.cmd y ej
 - npm install @stomp/stompjs@5.2.0 --save
 - npm i sockjs-client --save
 - npm i @types/sockjs-client --save-dev
+
+## SonarQube en SpringBoot
+
+1. Descargar SonarQube ->https://www.sonarsource.com/products/sonarqube/downloads/historical-downloads/
+2. Acceder a la carpeta descargada desde la terminal y buscar la carpeta bin/windows
+3. Ejecutar StartSonar
+4. Se ejecutará en el localhost:9000 user:admin password:admin
+5. Incluir el plugin de Sonar en el pom.xml
+
+```bash
+            <plugin>
+                <groupId>org.sonarsource.scanner.maven</groupId>
+                <artifactId>sonar-maven-plugin</artifactId>
+                <version>3.4.0.905</version>
+            </plugin>
+```
+
+6. Con el terminal acceder a la raíz del proyecto SpringBoot y ejecutar los siguientes comandos:
+
+```bash
+
+mvnw clean deploy sonar:sonar
+
+```
+
+```bash
+
+mvnw sonar:sonar -Dsonar.host.url=http://localhost:9000 -Dsonar.login=admin -Dsonar.password=admin
+
+
+```
+
+7. Métricas encontradas en el localhost:9000 projects
+
+## SonarQube en Angular
+
+[SonarQube en Angular](https://medium.com/beingcoders/setup-sonarqube-with-angular-project-in-6-minutes-57a87b3ca8c4)
