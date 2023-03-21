@@ -100,3 +100,53 @@ mvnw sonar:sonar -Dsonar.host.url=http://localhost:9000 -Dsonar.login=admin -Dso
 ## SonarQube en Angular
 
 [SonarQube en Angular](https://medium.com/beingcoders/setup-sonarqube-with-angular-project-in-6-minutes-57a87b3ca8c4)
+
+
+## Jenkins con SpringBoot
+
+1. Instalar Jenkins para Windows
+[Jenkins](https://www.jenkins.io/download/)
+
+2. Agregar un nuevo Job de tipo Pipeline
+
+3. En el script Pipeline, añadir el script o agregar en el proyecto un JenkinsFile y agregarlo al Pipeline
+
+```node
+node {
+    stage 'Clone the project'
+    git 'https://github.com/Markete17/Clients-App/'
+  
+    dir('C:/ProgramData/Jenkins/.jenkins/workspace/Jenkins Pipeline/backend/clients-rest-api') {
+        stage("Compilation and Analysis") {
+            parallel 'Compilation': {
+                bat "mvnw clean install -DskipTests"
+            }
+        }
+        stage("Tests and Deployment") {
+            parallel 'Unit tests': {
+                stage("Runing unit tests") {
+                    try {
+                        bat "mvnw test -Punit"
+                    } catch(err) {
+                        step([$class: 'JUnitResultArchiver', testResults: 
+                          '**/target/surefire-reports/TEST-*UnitTest.xml'])
+                        throw err
+                    }
+                }
+            }, 'Integration tests': {
+                stage("Runing integration tests") {
+                    try {
+                        bat "mvnw test -Pintegration"
+                    } catch(err) {
+                        step([$class: 'JUnitResultArchiver', testResults: 
+                          '**/target/surefire-reports/TEST-' 
+                            + '*IntegrationTest.xml'])
+                        throw err
+                    }
+                }
+            }
+        }
+    }
+
+}
+```
