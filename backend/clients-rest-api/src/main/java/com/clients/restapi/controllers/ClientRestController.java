@@ -3,7 +3,8 @@ package com.clients.restapi.controllers;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
-
+import java.text.ParseException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,6 +20,8 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,6 +40,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.clients.restapi.models.entities.Client;
+import com.clients.restapi.models.entities.ClientFilter;
 import com.clients.restapi.models.services.IClientService;
 import com.clients.restapi.models.services.IImageService;
 
@@ -238,6 +242,23 @@ public class ClientRestController {
 		header.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\""+resource.getFilename()+"\"");
 		
 		return new ResponseEntity<Resource>(resource,header,HttpStatus.OK);
+		
+	}
+	
+	//localhost:8080/api/clients/0/search/list?regionId=3
+	@GetMapping("clients/{page}/search/*")
+	public ResponseEntity<?> getClientsByProperties(@RequestParam(required = false) String firstName, 
+			@RequestParam(required = false) String lastName, 
+			@RequestParam(required = false) String email, 
+			@RequestParam(required = false) Long regionId, 
+			@RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date createAt,
+			@PathVariable Integer page){
+		
+		Specification<Client> specification = ClientFilter.getSpecification(firstName, lastName, email, regionId, createAt);
+		
+		Pageable pageable = (Pageable) PageRequest.of(page, 4);
+		;
+		return new ResponseEntity<Page<Client>>(this.clientService.findAll(specification,pageable),HttpStatus.OK);
 		
 	}
 

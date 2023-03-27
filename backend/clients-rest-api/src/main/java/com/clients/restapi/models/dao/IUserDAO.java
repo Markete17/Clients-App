@@ -1,7 +1,6 @@
 package com.clients.restapi.models.dao;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 
 import com.clients.restapi.models.entities.User;
 
