@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clients Filter</title>
+</head>
+<body>
+
+    <h1 class="text-center">Clients Filter</h1>
+
+    <div class="container mt-3">
+        <div class="row">
+            <div class="col-md-10 mx-auto">
+                <form [formGroup]="clientsForm" (ngSubmit)="onSubmit()">
+                    <div class="form-group row">
+                        <div class="col-sm-6">
+                            <label for="inputFirstname"><b>First name</b></label>
+                            <input formControlName="firstName" type="text" class="form-control" id="inputFirstname" placeholder="First name">
+                        </div>
+                        <div class="col-sm-6">
+                            <label for="inputLastname"><b>Last name</b></label>
+                            <input formControlName="lastName" type="text" class="form-control" id="inputLastname" placeholder="Last name">
+                        </div>
+                    </div>
+                    <div class="form-group row mt-2">
+                        <div class="col-sm-6">
+                            <label for="inputEmail"><b>Email</b></label>
+                            <input formControlName="email" type="email" class="form-control" id="inputEmail" placeholder="Email">
+                        </div>
+                        <div class="col-sm-3">
+                            <label for="inputRegion"><b>Region</b></label>
+                            <select formControlName="regionId" [compareWith]="compareRegion" class="form-control" id="inputRegion">
+                                <option value=""></option>
+                                <option *ngFor="let region of regions" [ngValue]="region.id">{{region.name}}</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-3">
+                            <label for="inputPostalCode"><b>Create At</b></label>
+                            <input formControlName="createAt" type="date" class="form-control" id="inputPostalCode" placeholder="Create At">
+                        </div>
+                    </div>
+                    <div class="text-center mt-4">
+                        <button type="submit" class="btn btn-primary mx-4">Filter</button>
+                        <button type="reset" class="btn btn-success" (click)="reset()">Clear</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="container mt-4">
+
+
+        <div *ngIf="clients?.length==0" class="alert alert-info">
+            No hay resultados
+        </div>
+            <table class="table table-bordered table-striped" *ngIf="clients?.length>0">
+                <thead class="text-primary" class="text-center">
+                    <tr>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Email</th>
+                        <th>Region</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody class="text-center">
+                    <tr *ngFor="let client of clients">
+                        <td>{{client.firstName }}</td> <!--<td>{{client.firstName || uppercase }}</td> para formatear dentro de la plantilla y no en el component--> 
+                        <td>{{client.lastName}}</td>
+                        <td>{{client.email}}</td>
+                        <td>{{client.region.name}}</td>
+                        <td>{{client.createAt | date : "dd/MM/yyyy" }}</td><!--<td>{{client.firstName || date: "EEEE d, MMMM yyyy" }} -->
+                    </tr>
+                </tbody>
+            </table>
+
+    </div>
+    
+</body>
+</html>

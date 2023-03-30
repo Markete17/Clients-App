@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Client } from './client';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders,HttpParams } from '@angular/common/http';
 import { map,catchError,Observable,throwError,tap} from 'rxjs';
 import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
@@ -82,6 +82,26 @@ export class ClientService {
           }
         )
       }),
+    )
+  }
+
+  getClientsFilter(page:number,parameters:Map<string,any>): Observable<any>{
+
+      // Initialize Params Object
+      let params = new HttpParams();
+
+
+      for(let [key,value] of parameters.entries()){
+        params = params.append(key,value)
+        
+      }
+
+      console.log(params)
+      
+    return this.http.get(`${this.urlEndPoint}/${page}/search/list`,{params: params}).pipe(
+      map(
+        (response:any) => (response.content as Client[])
+      )
     )
   }
 

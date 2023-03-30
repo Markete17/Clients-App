@@ -256,7 +256,7 @@ public class ClientRestController {
 		
 		Specification<Client> specification = ClientFilter.getSpecification(firstName, lastName, email, regionId, createAt);
 		
-		Pageable pageable = (Pageable) PageRequest.of(page, 4);
+		Pageable pageable = (Pageable) PageRequest.of(page, 10);
 		;
 		return new ResponseEntity<Page<Client>>(this.clientService.findAll(specification,pageable),HttpStatus.OK);
 		
