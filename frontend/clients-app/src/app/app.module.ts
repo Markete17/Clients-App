@@ -39,6 +39,7 @@ const routes: Routes = [
   {path: 'invoices/form/:clientId', component:InvoiceComponent, canActivate:[AuthGuard,RoleGuard],data:{role: 'ROLE_ADMIN'}},
   {path: 'chat', component:ChatComponent, canActivate:[AuthGuard,RoleGuard],data:{role: 'ROLE_USER'}},
   {path: 'clients/filter', component:ClientsFilterComponent, canActivate:[AuthGuard,RoleGuard],data:{role: 'ROLE_USER'}},
+  {path: 'clients/filter/page/:page', component:ClientsFilterComponent, canActivate:[AuthGuard,RoleGuard],data:{role: 'ROLE_USER'}},
 ]
 
 

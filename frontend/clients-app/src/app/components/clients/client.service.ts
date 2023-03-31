@@ -95,14 +95,8 @@ export class ClientService {
         params = params.append(key,value)
         
       }
-
-      console.log(params)
       
-    return this.http.get(`${this.urlEndPoint}/${page}/search/list`,{params: params}).pipe(
-      map(
-        (response:any) => (response.content as Client[])
-      )
-    )
+    return this.http.get(`${this.urlEndPoint}/${page}/search/list`,{params: params})
   }
 
   // En vez de con el Pipe se puede poner <Client> despues del http operator

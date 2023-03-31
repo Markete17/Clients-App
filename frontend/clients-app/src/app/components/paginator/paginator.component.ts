@@ -9,6 +9,8 @@ export class PaginatorComponent implements OnInit {
   constructor() { }
 
   @Input() paginator:any;
+  @Input() url:string;
+  @Input() params:Map<string,any>
   pages: number[]
 
   from: number;

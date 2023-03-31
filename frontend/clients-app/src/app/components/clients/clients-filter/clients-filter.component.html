@@ -53,7 +53,7 @@
     <div class="container mt-4">
 
 
-        <div *ngIf="clients?.length==0" class="alert alert-info">
+        <div *ngIf="clients?.length==0 && page!=null"  class="alert alert-info">
             No hay resultados
         </div>
             <table class="table table-bordered table-striped" *ngIf="clients?.length>0">
@@ -76,7 +76,8 @@
                     </tr>
                 </tbody>
             </table>
-
+            <!-- Por tema asincrono hay que validar que exista ese paginator con ngIf-->
+            <app-paginator *ngIf="paginator" [paginator] = "paginator" [url]="url" [params]="parameters"></app-paginator>
     </div>
     
 </body>

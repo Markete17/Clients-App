@@ -19,6 +19,7 @@ export class ClientsComponent implements OnInit {
 
   clients: Client[]
   paginator:any;
+  url:string='/clients/page'
   selectedClient:Client;
 
   ngOnInit(): void {
